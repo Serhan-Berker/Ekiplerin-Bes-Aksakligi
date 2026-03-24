@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ekiplerin Temel Beş Aksaklığı - Değerlendirme</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=Fraunces:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F5F0;
+    --card: #FFFFFF;
+    --text: #2C2C2C;
+    --muted: #6B6B6B;
+    --border: #E2DFD8;
+    --accent: #3B5998;
+    --accent-light: #EEF1F8;
+    --guven: #D4503A;
+    --catisma: #E8973C;
+    --baglilik: #DFB834;
+    --hesap: #4BA86E;
+    --sonuc: #3B5998;
+    --radius: 12px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 24px 16px 60px;
+  }
+
+  header {
+    text-align: center;
+    padding: 40px 0 32px;
+  }
+
+  header h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 0.92rem;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+
+  .scale-legend {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 20px 0 8px;
+    flex-wrap: wrap;
+  }
+
+  .scale-legend span {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .scale-legend span strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .progress-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    padding: 12px 0 8px;
+  }
+
+  .progress-track {
+    height: 4px;
+    background: var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--guven), var(--catisma), var(--baglilik), var(--hesap), var(--sonuc));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-text {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 4px;
+  }
+
+  .question-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    transition: border-color 0.3s;
+  }
+
+  .question-card.answered {
+    border-color: #C8D6B9;
+  }
+
+  .question-card .q-number {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+
+  .question-card .q-text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .rating-group {
+    display: flex;
+    gap: 0;
+    width: 100%;
+  }
+
+  .rating-group label {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .rating-group input[type="radio"] {
+    display: none;
+  }
+
+  .rating-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 4px;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    transition: all 0.2s;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--muted);
+    min-height: 52px;
+  }
+
+  .rating-group label:first-child .rating-btn {
+    border-radius: 10px 0 0 10px;
+  }
+
+  .rating-group label:last-child .rating-btn {
+    border-radius: 0 10px 10px 0;
+  }
+
+  .rating-group label:not(:first-child) .rating-btn {
+    border-left: none;
+  }
+
+  .rating-group input[type="radio"]:checked + .rating-btn {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+    transform: scale(1.04);
+    z-index: 2;
+    position: relative;
+    box-shadow: 0 2px 8px rgba(59,89,152,0.25);
+  }
+
+  .rating-group label:hover .rating-btn {
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+
+  .rating-group input[type="radio"]:checked + .rating-btn:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .submit-area {
+    text-align: center;
+    margin-top: 32px;
+  }
+
+  .submit-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 16px 56px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 16px rgba(59,89,152,0.3);
+    letter-spacing: 0.02em;
+  }
+
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(59,89,152,0.4); }
+  .submit-btn:disabled { background: #B0B0B0; cursor: not-allowed; box-shadow: none; transform: none; }
+
+  .error-msg {
+    color: var(--guven);
+    font-size: 0.85rem;
+    margin-top: 12px;
+    display: none;
+  }
+
+  /* ─── RESULTS ─── */
+  #results {
+    display: none;
+  }
+
+  .results-header {
+    text-align: center;
+    padding: 40px 0 24px;
+  }
+
+  .results-header h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .results-header p {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+
+  .result-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+    border-left: 5px solid;
+    animation: slideUp 0.5s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  @keyframes slideUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-card:nth-child(1) { border-left-color: var(--guven); animation-delay: 0.1s; }
+  .result-card:nth-child(2) { border-left-color: var(--catisma); animation-delay: 0.2s; }
+  .result-card:nth-child(3) { border-left-color: var(--baglilik); animation-delay: 0.3s; }
+  .result-card:nth-child(4) { border-left-color: var(--hesap); animation-delay: 0.4s; }
+  .result-card:nth-child(5) { border-left-color: var(--sonuc); animation-delay: 0.5s; }
+
+  .result-card .rc-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .rc-avg {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+
+  .result-card:nth-child(1) .rc-avg { color: var(--guven); }
+  .result-card:nth-child(2) .rc-avg { color: var(--catisma); }
+  .result-card:nth-child(3) .rc-avg { color: var(--baglilik); }
+  .result-card:nth-child(4) .rc-avg { color: var(--hesap); }
+  .result-card:nth-child(5) .rc-avg { color: var(--sonuc); }
+
+  .rc-bar-track {
+    height: 8px;
+    background: #EDEBE6;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+
+  .rc-bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 1s ease 0.4s;
+    width: 0%;
+  }
+
+  .result-card:nth-child(1) .rc-bar-fill { background: var(--guven); }
+  .result-card:nth-child(2) .rc-bar-fill { background: var(--catisma); }
+  .result-card:nth-child(3) .rc-bar-fill { background: var(--baglilik); }
+  .result-card:nth-child(4) .rc-bar-fill { background: var(--hesap); }
+  .result-card:nth-child(5) .rc-bar-fill { background: var(--sonuc); }
+
+  .rc-comment {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.55;
+    font-style: italic;
+  }
+
+  .pyramid {
+    margin: 32px auto;
+    max-width: 400px;
+  }
+
+  .pyramid svg { width: 100%; height: auto; }
+
+  @media (max-width: 480px) {
+    header h1 { font-size: 1.35rem; }
+    .question-card { padding: 16px; }
+    .container { padding: 16px 12px 48px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container" id="formSection">
+  <header>
+    <h1>Ekiplerin Temel Beş Aksaklığı</h1>
+    <p>Her bir ifadeyi ekibiniz açısından değerlendirin. Yanıtlarınız gizli tutulacaktır.</p>
+    <div class="scale-legend">
+      <span><strong>1</strong> Asla</span>
+      <span><strong>2</strong> Nadiren</span>
+      <span><strong>3</strong> Zaman Zaman</span>
+      <span><strong>4</strong> Genellikle</span>
+      <span><strong>5</strong> Daima</span>
+    </div>
+  </header>
+
+  <div class="progress-bar">
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">0 / 38</div>
+  </div>
+
+  <div id="questionsContainer"></div>
+
+  <div class="submit-area">
+    <button class="submit-btn" id="submitBtn" disabled onclick="showResults()">Gönder</button>
+    <div class="error-msg" id="errorMsg">Lütfen tüm soruları cevaplayın.</div>
+  </div>
+</div>
+
+<div class="container" id="results">
+  <div class="results-header">
+    <h2>Değerlendirme Sonuçlarınız</h2>
+    <p>Aşağıda her bir aksaklık alanı için ortalama puanınız ve yorumu bulunmaktadır.</p>
+  </div>
+  <div id="resultsContainer"></div>
+</div>
+
+<script>
+const questions = [
+  {n:1, t:"Ekip elemanları hatalarını kabullenmekteler."},
+  {n:2, t:"Ekip elemanları konuları tartışırken heyecanlıdır ve düşüncelerini sakınmazlar."},
+  {n:3, t:"Ekip elemanları birbirlerinin katkı ve başarılarını ifade etmede istekliler."},
+  {n:4, t:"Ekip toplantıları ilginç ve iddialı geçmekte (sıkıcı değiller)."},
+  {n:5, t:"Ekip toplantıları sırasında en önemli - ve zor- konular tartışılmakta."},
+  {n:6, t:"Ekip elemanları birbirleriyle zayıf yanları hakkında savunmaya geçmeden konuşabilmekteler."},
+  {n:7, t:"Ekip elemanları çatışmaya sebep olabilecek durumlarda dahi görüşlerini dile getirmekteler."},
+  {n:8, t:"Ekip elemanları bir diğerinin verimsiz davranışlarına dikkat çekmekteler."},
+  {n:9, t:"Ekip yüksek performans açısından üne sahip."},
+  {n:10, t:"Ekip elemanları çekinmeden yardım isteyebilmekteler."},
+  {n:11, t:"Ekip elemanları toplantılardan, üzerinde mutabık kalınan kararlardan herkesin ikna olduğuna dair güvenle ayrılmaktalar."},
+  {n:12, t:"Tartışmalar esnasında ekip elemanları birbirlerini bu sonuç ve görüşlere nasıl ulaştıkları konusunda sorgulamaktalar."},
+  {n:13, t:"Ekip elemanları kendi sorumluluk alanları dahilinde bir diğerinden bilgi istemekteler."},
+  {n:14, t:"Ekip ortak hedefleri yakalayamadığında her bir eleman, ekip performansını artırmak amacıyla kişisel sorumluluk üstlenmekte."},
+  {n:15, t:"Ekip elemanları, ekip çıkarı için kendi çıkarlarından fedakarlık etmeye hevesliler."},
+  {n:16, t:"Ekip elemanları, sorumluluk alanlarındaki sorunlar hakkında iş arkadaşlarıyla yüzleşmekteler."},
+  {n:17, t:"Ekip elemanları bir diğerinin becerileri ve uzmanlığını kabul etmekte ve bunlardan faydalanmaktalar."},
+  {n:18, t:"Ekip elemanları toplantılar esnasında birbirlerinin görüşlerini almakta."},
+  {n:19, t:"Ekip elemanları tartışmaları net kararlar ile sonlandırmakta ve bunları hayata geçirmekte."},
+  {n:20, t:"Ekip elemanları mevcut yaklaşımları ve yöntemleri hakkında birbirlerine sorular sormaktalar."},
+  {n:21, t:"Ekip, zayıf performanslı kişilerin gelişim beklentisini hissetmelerini sağlamakta."},
+  {n:22, t:"Ekip elemanları birbirlerinden özür dilemekten kaçınmamaktalar."},
+  {n:23, t:"Ekip elemanları rağbet görmeyebilecek görüşleri rahatlıkla grupla paylaşabilmekteler."},
+  {n:24, t:"Ekip, yön ve öncelikler konusunda net."},
+  {n:25, t:"Ekip elemanları katkılarının takdir edilmesini talep etmekte."},
+  {n:26, t:"Ekibin tüm elemanları aynı yüksek standartlara yönlendirilmekteler."},
+  {n:27, t:"Ekip çatışma olduğunda, bir diğer konuya geçmeden önce meseleyle yüzleşmekte ve uğraşmakta."},
+  {n:28, t:"Ekip ortak hedefler etrafında toplanmış durumda."},
+  {n:29, t:"Ekip sürekli olarak hedeflerini yakalamakta."},
+  {n:30, t:"Ekip, kesin bilgi mevcut olmadığında dahi karara varabilmekte."},
+  {n:31, t:"Ekip elemanları bireysel başarıdan ziyade ortak başarıya değer vermekteler."},
+  {n:32, t:"Ekip elemanları birbirlerine karşı açık ve gerçekler."},
+  {n:33, t:"Ekip elemanları kendi kişisel yaşamlarını diğerleri ile rahatlıkla paylaşabilmekteler."},
+  {n:34, t:"Ekip, kararlarının arkasında durmakta."},
+  {n:35, t:"Ekip elemanları düzenli olarak verdikleri sözleri ve sorumluluklarını takip etmekteler."},
+  {n:36, t:"Ekip elemanları birbirlerini yargılamadan yapıcı geri bildirim sunmaktalar."},
+  {n:37, t:"Ekip elemanları ünvan ve statüye önem vermemekte. (Bu ifadeye yüksek puan vermeniz ekip elemanlarının ünvan ve statüye önem VERMEDİĞİNİ göstermektedir.)"},
+  {n:38, t:"Ekip elemanları başlangıçta hemfikir olmasalar dahi verilen grup kararlarına destek vermekteler."}
+];
+
+const categories = [
+  {
+    name: "GÜVEN EKSİKLİĞİ",
+    qs: [1,6,10,13,17,22,32,33],
+    high: "Ekibiniz açık ve dürüst olmanın ilke olduğu bir ortam yaratmış.",
+    mid: "Ekibiniz bireysel güçlü yanları, gelişim alanları ve yardım ihtiyaçları hakkında kendi içlerinde daha açık ve dürüst bir ortam yaratmalı.",
+    low: "Ekibiniz bireysel güçlü yanları, gelişim alanları ve yardım ihtiyacı hakkında gerekli dürüstlük ve açıklık seviyesine sahip değil."
+  },
+  {
+    name: "ÇATIŞMAKTAN KORKMAK",
+    qs: [2,4,5,7,12,18,23,27],
+    high: "Ekibiniz önemli konular hakkında çekinmeden tartışma rahatlığına sahip.",
+    mid: "Ekibiniz önemli konular hakkında çekinmeden tartışacak bir ortam yaratmalı.",
+    low: "Ekibiniz önemli konular hakkında çekinmeden tartışabilecek bir ortam sağlamıyor."
+  },
+  {
+    name: "BAĞLILIK EKSİKLİĞİ",
+    qs: [11,19,24,28,30,34,38],
+    high: "Ekibiniz belirsizliğe çok az fırsat bırakarak net kararlar benimseme kabiliyetine sahip.",
+    mid: "Ekibiniz net kararlar almakta zaman zaman zorlanabilir. Bu, kurum içerisinde belirsizliğe yol açabilir.",
+    low: "Ekibiniz net kararlar benimseyemiyor. Bu da belirsizliğe sebebiyet veriyor."
+  },
+  {
+    name: "HESAP SORMA",
+    qs: [8,16,20,21,26,35,36],
+    high: "Ekibiniz performans ve davranışsal konularda diğerleri ile yüzleşmekten kaçınmıyor.",
+    mid: "Ekibiniz performans ve davranışsal konularda birbirleri ile yüzleşmekten kaçınan kişilere sahip olabilir.",
+    low: "Ekibiniz performans ve davranışsal konularda birbirleri ile yüzleşmekten kaçınan kişilere sahip."
+  },
+  {
+    name: "SONUÇLARI DİKKATE ALMAMAK",
+    qs: [3,9,14,15,25,29,31,37],
+    high: "Ekibiniz bireysel tanınma ve statü kazanmadan daha çok ortak başarıya değer vermekte.",
+    mid: "Ekibinizin elemanları ekibin ortak hedeflerine odaklanmaktan daha çok bireysel veya bölümsel tanınma ve egoya daha fazla önem veriyor olabilir.",
+    low: "Ekibiniz bireysel veya bölümsel tanınma yahut egodan daha çok ortak başarıya değer vermeli."
+  }
+];
+
+const answers = {};
+
+function buildForm() {
+  const container = document.getElementById('questionsContainer');
+  questions.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.id = `card-${q.n}`;
+    card.innerHTML = `
+      <div class="q-number">Soru ${q.n} / 38</div>
+      <div class="q-text">${q.t}</div>
+      <div class="rating-group">
+        ${[1,2,3,4,5].map(v => `
+          <label>
+            <input type="radio" name="q${q.n}" value="${v}" onchange="recordAnswer(${q.n}, ${v})">
+            <div class="rating-btn">${v}</div>
+          </label>
+        `).join('')}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function recordAnswer(qn, val) {
+  answers[qn] = val;
+  document.getElementById(`card-${qn}`).classList.add('answered');
+  const count = Object.keys(answers).length;
+  document.getElementById('progressFill').style.width = `${(count / 38) * 100}%`;
+  document.getElementById('progressText').textContent = `${count} / 38`;
+  document.getElementById('submitBtn').disabled = count < 38;
+  document.getElementById('errorMsg').style.display = 'none';
+}
+
+function showResults() {
+  if (Object.keys(answers).length < 38) {
+    document.getElementById('errorMsg').style.display = 'block';
+    return;
+  }
+
+  document.getElementById('formSection').style.display = 'none';
+  document.getElementById('results').style.display = 'block';
+
+  const rc = document.getElementById('resultsContainer');
+  rc.innerHTML = '';
+
+  categories.forEach(cat => {
+    const sum = cat.qs.reduce((s, qn) => s + (answers[qn] || 0), 0);
+    const avg = sum / cat.qs.length;
+    const pct = (avg / 5) * 100;
+
+    let comment;
+    if (avg >= 3.75) comment = cat.high;
+    else if (avg >= 3.25) comment = cat.mid;
+    else comment = cat.low;
+
+    const card = document.createElement('div');
+    card.className = 'result-card';
+    card.innerHTML = `
+      <div class="rc-title">
+        <span>${cat.name}</span>
+        <span class="rc-avg">${avg.toFixed(2)}</span>
+      </div>
+      <div class="rc-bar-track">
+        <div class="rc-bar-fill" style="width:0%"></div>
+      </div>
+      <div class="rc-comment">${comment}</div>
+    `;
+    rc.appendChild(card);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        card.querySelector('.rc-bar-fill').style.width = `${pct}%`;
+      });
+    });
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildForm();
+</script>
+</body>
+</html>
